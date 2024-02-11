@@ -1,5 +1,6 @@
 import { Link } from "expo-router";
 import { Text, StyleSheet, View, Pressable, Image } from "react-native";
+import FormatedPrice from "../components/price";
 
 export default function CardComponent({ data }) {
   return (
@@ -10,8 +11,8 @@ export default function CardComponent({ data }) {
       }}
       asChild
     >
-      <Pressable>
-        <View style={styles.card}>
+      <Pressable style={styles.card}>
+        <View >
           <Image
             style={styles.image}
             source={{ uri: data.featuredImage.node.sourceUrl }}
@@ -19,7 +20,7 @@ export default function CardComponent({ data }) {
           <View style={styles.textBlock}>
             <Text style={styles.carTitle}>{data.title}</Text>
             <Text style={styles.price}>
-              {data.price.edges[0].node.name} AED
+              <FormatedPrice price={data.price.edges[0].node.name}/>
             </Text>
           </View>
         </View>
@@ -30,17 +31,21 @@ export default function CardComponent({ data }) {
 
 const styles = StyleSheet.create({
   card: {
-    width: "100%",
+    maxWidth: "50%",
+    flex: 1,
     color: "#fff",
     backgroundColor: "gray",
     paddingBottom: 10,
     marginBottom: 10,
+    borderRadius: 16,
   },
   image: {
     flex: 1,
     width: "100%",
-    height: 300,
+    aspectRatio: 1,
     resizeMode: "cover",
+    borderTopRightRadius: 16,    
+    borderTopLeftRadius: 16
   },
   textBlock: {
     padding: 10,
@@ -51,6 +56,7 @@ const styles = StyleSheet.create({
     color: "#FEFFFF",
   },
   price: {
-    fontSize: 20,
+    fontSize: 17,
+    fontWeight: '600'
   },
 });

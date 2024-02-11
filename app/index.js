@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import axios from "axios";
 import CardComponent from "../components/card";
 
@@ -25,7 +25,6 @@ export default function Page() {
                     sourceUrl
                   }
                   }
-                  slug
                   title
                   price {
                     edges {
@@ -53,7 +52,8 @@ export default function Page() {
         data={data}
         renderItem={({ item }) => <CardComponent data={item} />}
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContainer}
+        numColumns={2}
+        columnWrapperStyle={{ gap: 8 }}
       />
     </View>
   );
@@ -64,10 +64,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
     padding: 10,
-    flexGrow: 1,
-    justifyContent: "center",
-  },
-  listContainer: {
-    paddingVertical: 8,
   },
 });
