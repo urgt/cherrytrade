@@ -31,7 +31,7 @@ export default function CardComponent({ data }) {
 
 const styles = StyleSheet.create({
   card: {
-    maxWidth: "50%",
+    maxWidth: "48%",
     flex: 1,
     color: "#fff",
     backgroundColor: "gray",

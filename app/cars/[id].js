@@ -59,23 +59,21 @@ export default function singleCar() {
                         }
                     }
                 `,
-          variables: { id }, // Pass the id variable as a parameter
+          variables: { id }, 
         }
       );
 
-      const responseData = response.data.data.buyACar; // Retrieve data from the response
+      const responseData = response.data.data.buyACar; 
       if (!responseData) {
         throw new Error("Data not found in the response");
       }
 
       
-      const imagesArr = responseData.acfbuyACar?.buyGallery?.nodes || []; // Safely access nodes array
-      const imagest = imagesArr.map((element) => element.sourceUrl); // Use map for cleaner code
+      const imagesArr = responseData.acfbuyACar?.buyGallery?.nodes || [];
+      const imagest = imagesArr.map((element) => element.sourceUrl); 
 
-      setData(responseData); // Set data state
-      setImages(imagest); // Set images state
-
-      console.log(responseData.color);
+      setData(responseData); 
+      setImages(imagest); 
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -83,13 +81,13 @@ export default function singleCar() {
 
   return (
     <View style={{ flex:1}}>
-      {data.title ? (
-        <View>
-          <Stack.Screen
+      <Stack.Screen
             options={{
-              title: data.title,
+              title: "",
             }}
           />
+      {data.title ? (
+        <View>          
           <SliderBox images={images} />
           <View style={styles.contentContainer}>
             <Text style={styles.title}>{data.title}</Text>
