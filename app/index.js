@@ -19,6 +19,7 @@ export default function Page() {
   const [size, setSize] = useState(20);
   const [cursor, setCursor] = useState("");
   const [hasNextPage, setHasNextPage] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -36,7 +37,7 @@ export default function Page() {
                   id
                   featuredImage {
                     node {
-                      sourceUrl
+                      sourceUrl(size: MEDIUM_LARGE)
                     }
                   }
                   title
@@ -86,7 +87,7 @@ export default function Page() {
                     id
                     featuredImage {
                       node {
-                        sourceUrl
+                        sourceUrl(size: MEDIUM_LARGE)
                       }
                     }
                     title
@@ -114,7 +115,10 @@ export default function Page() {
         );
 
         const newNodes = response.data.data.allBuyACar.nodes.filter(
-          (node) => !data.some((existingNode) => existingNode.buyACarId === node.buyACarId)
+          (node) =>
+            !data.some(
+              (existingNode) => existingNode.buyACarId === node.buyACarId
+            )
         );
         setData([...data, ...newNodes]);
 
@@ -131,20 +135,11 @@ export default function Page() {
   };
 
   function Loader() {
-    return (
-      <View>
-        {hasNextPage == true ? (
-          <ActivityIndicator size={"large"} />
-        ) : (
-          <Text style={{textAlign: "center"}}>That's all!</Text>
-        )}
-      </View>
-    );
+    return <View>{hasNextPage && <ActivityIndicator size={"large"} />}</View>;
   }
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <Stack.Screen options={{ title: "", headerShown: false }} />
+  function SearchInput() {
+    return (
       <View>
         <TextInput
           placeholder="Search"
@@ -152,7 +147,7 @@ export default function Page() {
           clearButtonMode="always"
           style={{
             paddingHorizontal: 10,
-            paddingVertical: 5,
+            paddingVertical: 12,
             borderRadius: 8,
             borderWidth: 1,
             borderColor: "#ccc",
@@ -160,16 +155,24 @@ export default function Page() {
           }}
         />
       </View>
+    );
+  }
 
+  return (
+    <SafeAreaView style={styles.container}>
+      <Stack.Screen options={{ title: "", headerShown: false }} />
       <FlatList
         data={data}
         renderItem={({ item }) => <CardComponent data={item} />}
         keyExtractor={(item, index) => index}
         numColumns={2}
         columnWrapperStyle={{ gap: 8 }}
+        ListHeaderComponent={SearchInput}
         ListFooterComponent={Loader}
+        refreshing={isLoading}
+        onRefresh={fetchData}
         onEndReached={loadMoreData}
-        onEndReachedThreshold={0}
+        onEndReachedThreshold={2}
       />
     </SafeAreaView>
   );
